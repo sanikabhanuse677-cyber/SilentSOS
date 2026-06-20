@@ -1,0 +1,217 @@
+* {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+}
+
+body {
+ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+ color: #ffffff;
+ min-height: 100vh;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.container {
+ max-width: 420px;
+ width: 100%;
+ padding: 20px;
+ margin: 20px;
+}
+
+header {
+ text-align: center;
+ margin-bottom: 30px;
+}
+
+header h1 {
+ font-size: 2.2rem;
+ color: #ff4444;
+ text-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+}
+
+.subtitle {
+ color: #888;
+ font-size: 0.9rem;
+ margin-top: 5px;
+}
+
+.status-card {
+ background: rgba(255, 255, 255, 0.05);
+ border: 1px solid rgba(255, 255, 255, 0.1);
+ border-radius: 12px;
+ padding: 15px;
+ text-align: center;
+ margin-bottom: 25px;
+ backdrop-filter: blur(10px);
+}
+
+.status-indicator {
+ font-size: 1.5rem;
+ color: #4CAF50;
+ animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+ 0% { opacity: 1; }
+ 50% { opacity: 0.5; }
+ 100% { opacity: 1; }
+}
+
+.sos-button {
+ width: 100%;
+ padding: 30px 20px;
+ background: linear-gradient(145deg, #ff3333, #cc0000);
+ border: none;
+ border-radius: 20px;
+ color: white;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+ margin-bottom: 25px;
+}
+
+.sos-button:hover {
+ transform: scale(1.02);
+ box-shadow: 0 12px 35px rgba(255, 0, 0, 0.4);
+}
+
+.sos-button:active {
+ transform: scale(0.98);
+}
+
+.sos-button.activated {
+ background: linear-gradient(145deg, #4CAF50, #388E3C);
+ box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+}
+
+.button-text {
+ display: block;
+ font-size: 1.8rem;
+ font-weight: 800;
+ letter-spacing: 2px;
+}
+
+.button-subtext {
+ display: block;
+ font-size: 0.8rem;
+ opacity: 0.8;
+ margin-top: 8px;
+}
+
+.info-panel {
+ background: rgba(255, 255, 255, 0.05);
+ border: 1px solid rgba(255, 255, 255, 0.1);
+ border-radius: 12px;
+ padding: 20px;
+ margin-bottom: 25px;
+}
+
+.info-panel h3 {
+ color: #ff4444;
+ font-size: 0.9rem;
+ margin-bottom: 5px;
+ margin-top: 15px;
+}
+
+.info-panel h3:first-child {
+ margin-top: 0;
+}
+
+.info-panel p {
+ color: #ccc;
+ font-size: 0.9rem;
+ margin-bottom: 10px;
+}
+
+.contacts-section {
+ background: rgba(255, 255, 255, 0.05);
+ border: 1px solid rgba(255, 255, 255, 0.1);
+ border-radius: 12px;
+ padding: 20px;
+ margin-bottom: 25px;
+}
+
+.contacts-section h3 {
+ color: #ff4444;
+ font-size: 0.9rem;
+ margin-bottom: 15px;
+}
+
+.contact-item {
+ display: flex;
+ justify-content: space-between;
+ padding: 10px 0;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contact-item:last-child {
+ border-bottom: none;
+}
+
+.contact-name {
+ color: #fff;
+ font-weight: 500;
+}
+
+.contact-phone {
+ color: #888;
+ font-size: 0.85rem;
+}
+
+.quick-actions {
+ display: flex;
+ gap: 10px;
+ margin-bottom: 25px;
+}
+
+.action-btn {
+ flex: 1;
+ padding: 12px;
+ background: rgba(255, 255, 255, 0.1);
+ border: 1px solid rgba(255, 255, 255, 0.2);
+ border-radius: 10px;
+ color: white;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-size: 0.9rem;
+}
+
+.action-btn:hover {
+ background: rgba(255, 255, 255, 0.2);
+}
+
+footer {
+ text-align: center;
+ color: #555;
+ font-size: 0.8rem;
+}
+
+/* Alert animation */
+@keyframes alertPulse {
+ 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+ 70% { box-shadow: 0 0 0 20px rgba(255, 0, 0, 0); }
+ 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+}
+
+.sos-button.alerting {
+ animation: alertPulse 1.5s infinite;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+.container {
+ padding: 15px;
+ margin: 10px;
+ }
+
+.sos-button {
+ padding: 25px 15px;
+ }
+
+.button-text {
+ font-size: 1.5rem;
+ }
+}

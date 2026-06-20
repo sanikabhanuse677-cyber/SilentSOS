@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>SilentSOS — Emergency Alert</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ <div class="container">
+ <header>
+ <h1>🆘 SilentSOS</h1>
+ <p class="subtitle">Emergency Alert System</p>
+ </header>
+
+ <div class="status-card" id="statusCard">
+ <div class="status-indicator" id="statusIndicator">●</div>
+ <p id="statusText">Ready</p>
+ </div>
+
+ <button class="sos-button" id="sosButton">
+ <span class="button-text">ACTIVATE SOS</span>
+ <span class="button-subtext">Tap to send emergency alert</span>
+ </button>
+
+ <div class="info-panel" id="infoPanel" style="display: none;">
+ <h3>📍 Location</h3>
+ <p id="locationDisplay">Fetching location...</p>
+
+ <h3>🎤 Audio Recording</h3>
+ <p id="audioStatus">Not started</p>
+
+ <h3>📡 Alert Status</h3>
+ <p id="alertStatus">Not sent</p>
+ </div>
+
+ <div class="contacts-section">
+ <h3>👤 Trusted Contacts</h3>
+ <div class="contact-list" id="contactList">
+ <div class="contact-item">
+ <span class="contact-name">Emergency Contact 1</span>
+ <span class="contact-phone">+91 XXXXX XXXXX</span>
+ </div>
+ <div class="contact-item">
+ <span class="contact-name">Emergency Contact 2</span>
+ <span class="contact-phone">+91 XXXXX XXXXX</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="quick-actions">
+ <button class="action-btn" id="testBtn">🔍 Test Alert</button>
+ <button class="action-btn" id="dashboardBtn">📊 Dashboard</button>
+ </div>
+
+ <footer>
+ <p>Double-tap the logo for hidden trigger</p>
+ </footer>
+ </div>
+
+ <script type="module" src="app.js"></script>
+
+</body>
+</html>
