@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacts — SilentSOS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html"><span class="dot"></span>SilentSOS</a>
+  <a href="index.html">Home</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="contacts.html" class="active">Contacts</a>
+  <a href="history.html">History</a>
+</nav>
+
+<main>
+  <h1 class="page-title">Emergency Contacts</h1>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <p class="section-label">Add contact</p>
+    <div class="contact-form">
+      <input id="contact-name"  class="input" type="text"  placeholder="Full name"     autocomplete="off" />
+      <input id="contact-phone" class="input" type="tel"   placeholder="+91 55500 00000" autocomplete="off" />
+      <button id="add-btn" class="btn btn-primary">Add</button>
+    </div>
+    <div id="form-error" style="font-size:.82rem;color:var(--accent);min-height:1.2em"></div>
+  </div>
+
+  <p class="section-label">Saved contacts</p>
+  <div id="contact-list" class="contact-list">
+    <div class="empty">
+      <div class="spinner" style="margin:0 auto 1rem"></div>
+      Loading…
+    </div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getDatabase, ref, set, remove, onValue, push
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD_bfjw-Vb7iR3Qsbxc2dpSfbei85stvWA",
+  authDomain: "silentsos-hackathon.firebaseapp.com",
+  databaseURL: "https://silentsos-hackathon-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "silentsos-hackathon",
+  storageBucket: "silentsos-hackathon.firebasestorage.app",
+  messagingSenderId: "593930441942",
+  appId: "1:593930441942:web:63615da20dc0493e3ce577",
+  measurementId: "G-C4QZNZYMZK"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+const nameInput  = document.getElementById("contact-name");
+const phoneInput = document.getElementById("contact-phone");
+const addBtn     = document.getElementById("add-btn");
+const list       = document.getElementById("contact-list");
+const formErr    = document.getElementById("form-error");
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+function renderContacts(contacts) {
+  if (!contacts || Object.keys(contacts).length === 0) {
+    list.innerHTML = `<div class="empty">No contacts yet. Add one above.</div>`;
+    return;
+  }
+  list.innerHTML = Object.entries(contacts).map(([id, c]) => `
+    <div class="contact-item fade-in">
+      <div>
+  <div class="contact-name">${escHtml(c.name)}</div>
+
+  <div class="contact-phone">
+    ${escHtml(c.phone)}
+  </div>
+
+  <a
+    href="tel:${c.phone}"
+    class="btn btn-primary"
+    style="margin-top:.5rem;display:inline-block"
+  >
+    📞 Call
+  </a>
+</div>
+      <button class="contact-del" data-id="${id}" title="Delete">✕</button>
+    </div>
+  `).join("");
+
+  list.querySelectorAll(".contact-del").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      console.log("[Contacts] Deleting", id);
+      try {
+        await remove(ref(db, `contacts/${id}`));
+        showToast("Contact removed");
+      } catch (e) {
+        showToast("Delete failed");
+        console.error(e);
+      }
+    });
+  });
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+onValue(ref(db, "contacts"), snap => {
+  console.log("[Contacts] Snapshot received");
+  renderContacts(snap.val());
+});
+
+addBtn.addEventListener("click", async () => {
+  const name  = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
+  formErr.textContent = "";
+
+  if (!name)  { formErr.textContent = "Name is required.";         return; }
+  if (!phone) { formErr.textContent = "Phone number is required."; return; }
+
+  addBtn.disabled = true;
+  try {
+    const newRef = push(ref(db, "contacts"));
+    await set(newRef, { name, phone });
+    nameInput.value  = "";
+    phoneInput.value = "";
+    showToast("Contact saved ✓");
+    console.log("[Contacts] Added:", name, phone);
+  } catch (e) {
+    formErr.textContent = "Could not save — check Firebase config.";
+    console.error("[Contacts]", e);
+  } finally {
+    addBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

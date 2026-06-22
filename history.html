@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History — SilentSOS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html"><span class="dot"></span>SilentSOS</a>
+  <a href="index.html">Home</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="contacts.html">Contacts</a>
+  <a href="history.html" class="active">History</a>
+</nav>
+
+<main>
+  <h1 class="page-title">Alert History</h1>
+
+  <div class="filter-row">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="active">Active</button>
+    <button class="filter-btn" data-filter="acknowledged">Acknowledged</button>
+    <button class="filter-btn" data-filter="dispatched">Dispatched</button>
+    <button class="filter-btn" data-filter="resolved">Resolved</button>
+    <button class="filter-btn" data-filter="test">Test only</button>
+  </div>
+
+  <div id="history-list">
+    <div class="empty">
+      <div class="spinner" style="margin:0 auto 1rem"></div>
+      Loading history…
+    </div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD_bfjw-Vb7iR3Qsbxc2dpSfbei85stvWA",
+  authDomain: "silentsos-hackathon.firebaseapp.com",
+  databaseURL: "https://silentsos-hackathon-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "silentsos-hackathon",
+  storageBucket: "silentsos-hackathon.firebasestorage.app",
+  messagingSenderId: "593930441942",
+  appId: "1:593930441942:web:63615da20dc0493e3ce577",
+  measurementId: "G-C4QZNZYMZK"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+let allAlerts  = {};
+let activeFilter = "all";
+
+const histList = document.getElementById("history-list");
+
+function formatTime(iso) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleString();
+}
+
+function badgeHtml(status) {
+  const map = {
+    active:       ["badge-active",       "Active"],
+    acknowledged: ["badge-acknowledged", "Acknowledged"],
+    dispatched:   ["badge-dispatched",   "Dispatched"],
+    resolved:     ["badge-resolved",     "Resolved"]
+  };
+  const [cls, label] = map[status] || ["", status];
+  return `<span class="status-badge ${cls}">${label}</span>`;
+}
+
+function renderList() {
+  let entries = Object.entries(allAlerts).sort((a, b) => {
+    const ta = new Date(a[1].timestamp || 0).getTime();
+    const tb = new Date(b[1].timestamp || 0).getTime();
+    return tb - ta;
+  });
+
+  if (activeFilter !== "all") {
+    if (activeFilter === "test") {
+      entries = entries.filter(([, d]) => d.test === true);
+    } else {
+      entries = entries.filter(([, d]) => d.status === activeFilter);
+    }
+  }
+
+  if (entries.length === 0) {
+    histList.innerHTML = `<div class="empty">No alerts match this filter.</div>`;
+    return;
+  }
+
+  histList.innerHTML = entries.map(([id, data]) => {
+    const mapUrl = `https://maps.google.com/?q=${data.latitude},${data.longitude}`;
+    const testBadge = data.test ? `<span class="status-badge badge-test">TEST</span>` : "";
+    return `
+      <div class="card alert-card fade-in" data-status="${data.status}">
+        <div class="alert-header">
+          <div class="alert-id">${id}</div>
+          <div style="display:flex;gap:.35rem;align-items:center;flex-wrap:wrap">
+            ${testBadge}
+            ${badgeHtml(data.status)}
+          </div>
+        </div>
+        <div class="alert-meta">
+          <div>📍 <strong>${Number(data.latitude).toFixed(5)}, ${Number(data.longitude).toFixed(5)}</strong></div>
+          <div>🕐 <strong>${formatTime(data.timestamp)}</strong></div>
+        </div>
+        <div class="alert-actions">
+          <a class="btn btn-ghost" href="${mapUrl}" target="_blank">🗺 Open Map</a>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+onValue(ref(db, "alerts"), snap => {
+  console.log("[History] Snapshot received");
+  allAlerts = snap.val() || {};
+  renderList();
+});
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeFilter = btn.dataset.filter;
+    renderList();
+  });
+});
+</script>
+</body>
+</html>
