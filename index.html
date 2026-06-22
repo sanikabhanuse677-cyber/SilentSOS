@@ -1,64 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>SilentSOS — Emergency Alert</title>
- <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SilentSOS</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
- <div class="container">
- <header>
- <h1>🆘 SilentSOS</h1>
- <p class="subtitle">Emergency Alert System</p>
- </header>
 
- <div class="status-card" id="statusCard">
- <div class="status-indicator" id="statusIndicator">●</div>
- <p id="statusText">Ready</p>
- </div>
+<nav>
+  <a class="nav-brand" href="index.html"><span class="dot"></span>SilentSOS</a>
+  <a href="index.html" class="active">Home</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="contacts.html">Contacts</a>
+  <a href="history.html">History</a>
+</nav>
 
- <button class="sos-button" id="sosButton">
- <span class="button-text">ACTIVATE SOS</span>
- <span class="button-subtext">Tap to send emergency alert</span>
- </button>
+<main>
+  <!-- SOS trigger -->
+  <div class="sos-wrap">
+    <p class="section-label">Emergency trigger</p>
 
- <div class="info-panel" id="infoPanel" style="display: none;">
- <h3>📍 Location</h3>
- <p id="locationDisplay">Fetching location...</p>
+    <div class="sos-ring">
+      <button id="sos-btn" aria-label="Activate SOS">
+        <span>ACTIVATE</span>
+        <span class="label">SOS</span>
+      </button>
+    </div>
 
- <h3>🎤 Audio Recording</h3>
- <p id="audioStatus">Not started</p>
+    <div id="status-bar">Press the button to send an emergency alert</div>
 
- <h3>📡 Alert Status</h3>
- <p id="alertStatus">Not sent</p>
- </div>
+    <button id="test-btn">Send test alert</button>
 
- <div class="contacts-section">
- <h3>👤 Trusted Contacts</h3>
- <div class="contact-list" id="contactList">
- <div class="contact-item">
- <span class="contact-name">Emergency Contact 1</span>
- <span class="contact-phone">+91 XXXXX XXXXX</span>
- </div>
- <div class="contact-item">
- <span class="contact-name">Emergency Contact 2</span>
- <span class="contact-phone">+91 XXXXX XXXXX</span>
- </div>
- </div>
- </div>
+    <!-- SMS / Share -->
+    <div id="action-row" class="action-row" hidden>
+      <a id="sms-btn" class="btn btn-primary" href="#">📱 Send SMS</a>
+      <button id="share-btn" class="btn btn-secondary">🔗 Share</button>
+    </div>
+  </div>
 
- <div class="quick-actions">
- <button class="action-btn" id="testBtn">🔍 Test Alert</button>
- <button class="action-btn" id="dashboardBtn">📊 Dashboard</button>
- </div>
+  <!-- Live map -->
+  <div id="map-section">
+    <p class="section-label">Your location</p>
+    <iframe id="map-frame" allowfullscreen loading="lazy"
+            title="Live location map"></iframe>
+  </div>
 
- <footer>
- <p>Double-tap the logo for hidden trigger</p>
- </footer>
- </div>
+  <div id="active-alert-card" class="card" style="display:none;margin-top:1rem;">
 
- <script type="module" src="app.js"></script>
+  <h3>🚨 Emergency Alert Active</h3>
 
+  <p id="alert-status-home"></p>
+
+  <p id="alert-time-home"></p>
+
+  <p>
+    Your SOS has been sent successfully.
+  </p>
+
+  <div id="emergency-contact-buttons"></div>
+
+</div>
+
+</main>
+
+<div id="toast"></div>
+<script type="module" src="app.js"></script>
 </body>
 </html>
