@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SilentSOS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡</text></svg>">
+  <title>SilentSOS — Emergency Alert System</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,9 +15,11 @@
   <a href="dashboard.html">Dashboard</a>
   <a href="contacts.html">Contacts</a>
   <a href="history.html">History</a>
+  <a href="safeJourney.html">Safe Journey</a>
 </nav>
 
 <main>
+
   <!-- SOS trigger -->
   <div class="sos-wrap">
     <p class="section-label">Emergency trigger</p>
@@ -32,35 +35,36 @@
 
     <button id="test-btn">Send test alert</button>
 
-    <!-- SMS / Share -->
+    <!-- SMS / Share row (hidden until SOS is triggered) -->
     <div id="action-row" class="action-row" hidden>
       <a id="sms-btn" class="btn btn-primary" href="#">📱 Send SMS</a>
-      <button id="share-btn" class="btn btn-secondary">🔗 Share</button>
+      <button id="share-btn" class="btn btn-secondary">🔗 Share Location</button>
+    </div>
+
+    <!-- Safe Journey card -->
+    <div class="journey-card">
+      <h3>🛡 Safe Journey Mode</h3>
+      <p>Start a timed journey. SilentSOS will monitor you and automatically alert your trusted contacts if you become unresponsive.</p>
+      <a href="safeJourney.html" class="btn btn-journey">Start Safe Journey</a>
     </div>
   </div>
 
-  <!-- Live map -->
+  <!-- Live map (shown after SOS triggered or restored from storage) -->
   <div id="map-section">
     <p class="section-label">Your location</p>
-    <iframe id="map-frame" allowfullscreen loading="lazy"
-            title="Live location map"></iframe>
+    <iframe id="map-frame" allowfullscreen loading="lazy" title="Live location map"></iframe>
   </div>
 
-  <div id="active-alert-card" class="card" style="display:none;margin-top:1rem;">
-
-  <h3>🚨 Emergency Alert Active</h3>
-
-  <p id="alert-status-home"></p>
-
-  <p id="alert-time-home"></p>
-
-  <p>
-    Your SOS has been sent successfully.
-  </p>
-
-  <div id="emergency-contact-buttons"></div>
-
-</div>
+  <!-- Active alert card (shown when an alert is live) -->
+  <div id="active-alert-card" class="card" style="display:none; margin-top:1.5rem;">
+    <h3>🚨 Emergency Alert Active</h3>
+    <p id="alert-status-home"></p>
+    <p id="alert-time-home"></p>
+    <p style="font-size:.84rem;color:var(--muted);margin-bottom:.75rem;">
+      Your SOS alert has been sent. Tap below to call an emergency contact.
+    </p>
+    <div id="emergency-contact-buttons"></div>
+  </div>
 
 </main>
 
