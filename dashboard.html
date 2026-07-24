@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡</text></svg>">
   <title>Dashboard — SilentSOS</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -14,23 +15,85 @@
   <a href="dashboard.html" class="active">Dashboard</a>
   <a href="contacts.html">Contacts</a>
   <a href="history.html">History</a>
+  <a href="safeJourney.html">Safe Journey</a>
 </nav>
 
 <main>
-  <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.5rem">
-    <h1 class="page-title">Live Alerts</h1>
-    <span id="live-count" style="font-size:.8rem;color:var(--accent);font-weight:600">— active</span>
+  <div class="section-toolbar">
+    <h1 class="page-title" style="margin-bottom:0">Dashboard</h1>
+    <button id="resetDashboardBtn" class="btn btn-outline-danger btn-sm" type="button">↺ Reset Dashboard</button>
+  </div>
+
+  <!-- ── Status overview ── -->
+  <p class="section-label">Overview</p>
+  <div class="status-grid">
+    <div id="emergencyStatusCard" class="status-card is-idle">
+      <div class="status-card-header">
+        <span class="status-card-icon">🟢</span>
+        <span class="status-card-label">Emergency Status</span>
+      </div>
+      <div class="status-card-value" id="emergencyStatusValue">⏳ Preparing Dashboard…</div>
+      <div class="status-card-sub" id="emergencyStatusSub">Checking for active alerts…</div>
+    </div>
+
+    <div id="journeyStatusCard" class="status-card is-idle">
+      <div class="status-card-header">
+        <span class="status-card-icon">🛡</span>
+        <span class="status-card-label">Journey Status</span>
+      </div>
+      <div class="status-card-value" id="journeyStatusValue">No Active Journey</div>
+      <div class="status-card-sub" id="journeyStatusSub">Start one from Safe Journey</div>
+    </div>
+  </div>
+
+  <!-- ── Live Alerts ── -->
+  <div class="section-toolbar">
+    <p class="section-label" style="margin-bottom:0">Live Alerts</p>
+    <span id="live-count" style="font-size:.8rem;color:var(--accent);font-weight:600;">— active</span>
   </div>
 
   <div id="alerts-list">
     <div class="empty">
-      <div class="spinner" style="margin:0 auto 1rem"></div>
-      Connecting to Firebase…
+      <div class="spinner spinner-lg" style="margin:0 auto 1.25rem"></div>
+      <div class="empty-title">⏳ Preparing Dashboard…</div>
+      <div class="empty-desc">Live alerts will appear here automatically.</div>
+    </div>
+  </div>
+
+  <!-- ── Recent Activity ── -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">Recent Activity</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div id="activityFeed" class="activity-feed">
+    <div class="empty">
+      <span class="empty-icon">🕐</span>
+      <div class="empty-title">No recent activity</div>
+      <div class="empty-desc">SOS alerts and journey events will show up here.</div>
     </div>
   </div>
 </main>
 
 <div id="toast"></div>
+
+<!-- ── Reset Dashboard confirmation modal ── -->
+<div id="resetModal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+  <div class="modal-content">
+    <span class="modal-icon">↺</span>
+    <h2 class="modal-title" id="resetModalTitle">Reset Dashboard?</h2>
+    <p class="modal-msg">
+      This clears the journey status, countdown, and recent activity shown on this
+      dashboard. Your SOS alert history in Firebase is not affected.
+    </p>
+    <div class="modal-actions">
+      <button id="confirmResetBtn" class="btn btn-danger btn-block">↺ Yes, Reset Dashboard</button>
+      <button id="cancelResetBtn" class="btn btn-ghost btn-block">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script type="module" src="dashboard.js"></script>
 </body>
 </html>
