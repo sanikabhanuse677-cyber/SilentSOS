@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡</text></svg>">
   <title>Contacts — SilentSOS</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -14,32 +15,36 @@
   <a href="dashboard.html">Dashboard</a>
   <a href="contacts.html" class="active">Contacts</a>
   <a href="history.html">History</a>
+  <a href="safeJourney.html">Safe Journey</a>
 </nav>
 
 <main>
   <h1 class="page-title">Emergency Contacts</h1>
 
+  <!-- Add contact form -->
   <div class="card" style="margin-bottom:1.5rem">
     <p class="section-label">Add contact</p>
     <div class="contact-form">
-      <input id="contact-name"  class="input" type="text"  placeholder="Full name"     autocomplete="off" />
-      <input id="contact-phone" class="input" type="tel"   placeholder="+91 55500 00000" autocomplete="off" />
+      <input id="contact-name"  class="input" type="text" placeholder="Full name"         autocomplete="off" />
+      <input id="contact-phone" class="input" type="tel"  placeholder="+91 55500 00000"   autocomplete="off" />
       <button id="add-btn" class="btn btn-primary">Add</button>
     </div>
     <div id="form-error" style="font-size:.82rem;color:var(--accent);min-height:1.2em"></div>
   </div>
 
+  <!-- Saved contacts list -->
   <p class="section-label">Saved contacts</p>
   <div id="contact-list" class="contact-list">
     <div class="empty">
-      <div class="spinner" style="margin:0 auto 1rem"></div>
-      Loading…
+      <div class="spinner" style="margin:0 auto 1.25rem"></div>
+      <div class="empty-title">Loading contacts…</div>
     </div>
   </div>
 </main>
 
 <div id="toast"></div>
 
+<!-- ── Firebase script (DO NOT MODIFY) ── -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -75,7 +80,11 @@ function showToast(msg) {
 
 function renderContacts(contacts) {
   if (!contacts || Object.keys(contacts).length === 0) {
-    list.innerHTML = `<div class="empty">No contacts yet. Add one above.</div>`;
+    list.innerHTML = `<div class="empty">
+      <span class="empty-icon">👥</span>
+      <div class="empty-title">No contacts yet</div>
+      <div class="empty-desc">Add your first emergency contact above.</div>
+    </div>`;
     return;
   }
   list.innerHTML = Object.entries(contacts).map(([id, c]) => `
